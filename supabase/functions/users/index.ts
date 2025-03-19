@@ -49,6 +49,30 @@ serve(async (req) => {
         headers: { "Content-Type": "application/json" },
       });
 
+    case "POST":
+      const body = await req.json();
+      const { data: insertData, error: insertError } = await supabase
+        .from("users")
+        .insert({
+          email: body.email,
+          f_name: body.f_name,
+          l_name: body.l_name,
+          role: body.role,
+        })
+        .select();
+
+      if (insertError) {
+        return new Response(JSON.stringify({ error: insertError.message }), {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify(insertData), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+
     default:
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
         status: 405,
