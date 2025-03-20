@@ -20,3 +20,14 @@ entrypoint = "./functions/users/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/users/*.html" ]
+
+[functions.borrowed-books]
+enabled = true
+verify_jwt = true
+import_map = "./functions/borrowed-books/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/borrowed-books/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/borrowed-books/*.html" ]

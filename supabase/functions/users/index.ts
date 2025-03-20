@@ -26,15 +26,15 @@ serve(async (req) => {
       });
 
     case "PUT":
-      const body = await req.json();
+      const updateBody = await req.json();
       const { data: updateData, error: updateError } = await supabase
         .from("users")
         .update({
-          f_name: body.f_name,
-          l_name: body.l_name,
-          email: body.email,
+          f_name: updateBody.f_name,
+          l_name: updateBody.l_name,
+          email: updateBody.email,
         })
-        .eq("id", body.id)
+        .eq("id", updateBody.id)
         .select();
 
       if (updateError) {
@@ -50,14 +50,14 @@ serve(async (req) => {
       });
 
     case "POST":
-      const body = await req.json();
+      const createBody = await req.json();
       const { data: insertData, error: insertError } = await supabase
         .from("users")
         .insert({
-          email: body.email,
-          f_name: body.f_name,
-          l_name: body.l_name,
-          role: body.role,
+          email: createBody.email,
+          f_name: createBody.f_name,
+          l_name: createBody.l_name,
+          role: createBody.role,
         })
         .select();
 
