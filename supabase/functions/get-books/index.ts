@@ -7,17 +7,56 @@ const supabase = createClient(
 );
 
 serve(async (req) => {
-  const { data, error } = await supabase.from("books").select("*");
+  if (req.method === "GET") {
+    const { data, error } = await supabase.from("books").select("*");
 
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify(data), {
+      status: 200,
       headers: { "Content-Type": "application/json" },
     });
   }
 
-  return new Response(JSON.stringify(data), {
-    status: 200,
+  if (req.method === "POST") {
+    const bookData = await req.json();
+
+    const { data, error } = await supabase
+      .from("books")
+      .insert([
+        {
+          title: bookData.title,
+          author: bookData.author,
+          available: bookData.total_copies,
+          total_copies: bookData.total_copies,
+          cover_image: bookData.cover_image,
+          genre: bookData.genre,
+          description: bookData.description,
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select();
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify(data), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  return new Response(JSON.stringify({ error: "Method not allowed" }), {
+    status: 405,
     headers: { "Content-Type": "application/json" },
   });
 });
