@@ -112,8 +112,10 @@ serve(async (req) => {
           (book) => book.status === "borrowed"
         ).length;
 
+        const today = new Date();
         const pendingReturns = borrowedBooks.filter(
-          (book) => book.status === "return_requested"
+          (book) =>
+            book.status === "borrowed" && new Date(book.return_date) < today
         ).length;
 
         // last 10 borrows
