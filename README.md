@@ -1,10 +1,23 @@
 # Library-System-Backend
 
-A robust backend system for managing library operations built with Node.js and Supabase. This system provides a RESTful API interface for library management functionalities.
+This backend repository is part of the Learner's Library project, a comprehensive library management system designed as part of the Enterprise Software Engineering (ESE) module at Ada. This README file provides an overview of the backend structure, database schema, key features, technology stack, used tables, and edge functions.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Solution Overview](#solution-overview)
+- [Technology Stack](#technology-stack)
+- [Features](#features)
+- [Used Edge Functions](#used-edge-functions)
+- [Getting Started](#getting-started)
+- [Database Schema](#database-schema)
 
 ## Introduction
 
-##Solution Overview
+A robust backend system for managing library operations built with Node.js and Supabase. This system provides a RESTful API interface for library management functionalities. It uses Supabase for database management, PostgreSQL for data storage, and Deno for edge functions.
+
+## Solution Overview
+
 This Library Management System backend provides a complete solution for managing library operations such as, user list, book inventory management, and borrowing processes through Supabase edge-functions.
 
 ## Technology Stack
@@ -22,7 +35,7 @@ This Library Management System backend provides a complete solution for managing
 - User management with role-based permissions
 - Serverless functions for API endpoints
 
-## API Endpoints
+## Used Edge Functions
 
 **Books**
 
