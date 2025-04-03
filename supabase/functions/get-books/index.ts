@@ -85,6 +85,62 @@ serve(async (req) => {
     });
   }
 
+  if (req.method === "DELETE") {
+    const url = new URL(req.url);
+    const pathParts = url.pathname.split("/");
+    const bookId = pathParts[pathParts.length - 1];
+
+    if (!bookId || isNaN(parseInt(bookId))) {
+      return new Response(JSON.stringify({ error: "Invalid book ID" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // does the book have any active borrowings?
+    const { data: borrowings, error: borrowingsError } = await supabase
+      .from("borrowed_books")
+      .select("*")
+      .eq("book_id", bookId)
+      .eq("status", "borrowed");
+
+    if (borrowingsError) {
+      return new Response(JSON.stringify({ error: borrowingsError.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // if so, deletion should be denied
+    if (borrowings.length > 0) {
+      return new Response(
+        JSON.stringify({ error: "Cannot delete book with active borrowings" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // book deletion
+    const { data, error } = await supabase
+      .from("books")
+      .delete()
+      .eq("id", bookId);
+
+    if (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ success: true }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   return new Response(JSON.stringify({ error: "Method not allowed" }), {
     status: 405,
     headers: { "Content-Type": "application/json" },
